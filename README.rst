@@ -11,7 +11,8 @@ Usage
 
 1. Add ``'specifications'`` to ``INSTALLED_APPS``.
 2. Create a ``ForeignKey('specifications.Specification')`` on the model you
-   want to use specifications with.
+   want to use specifications with. The foreign key can be nullable or
+   required, as you wish.
 3. Create the place where the specification field data is actually stored::
 
        from specifications.models import SpecificationValueFieldBase
@@ -31,3 +32,6 @@ Usage
                model = MyObject
 
 5. There is no fifth step.
+
+The fields are available after saving a specification. The specification can
+be changed, but you risk losing data if you do this.
