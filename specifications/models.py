@@ -16,8 +16,6 @@ class Specification(models.Model):
         verbose_name = _('specification')
         verbose_name_plural = _('specifications')
 
-    objects = SpecificationManager()
-
     def __unicode__(self):
         return self.name
 
