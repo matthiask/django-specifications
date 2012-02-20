@@ -21,3 +21,12 @@ class FormWithSpecification(forms.ModelForm):
                 field.update_value(self)
 
         return instance
+
+    def specification_field_values(self):
+        if not (self.instance and self.instance.pk and self.instance.specification):
+            return {}
+
+        values = {}
+        for field in self.instance.all():
+            values[field.key] = field.get_value(self)
+        return values

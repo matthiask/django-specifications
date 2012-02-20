@@ -222,10 +222,14 @@ class SpecificationValueFieldBase(SpecificationFieldBase):
         form.fields[key] = self.formfield()
         return form[key]
 
-    def update_value(self, form):
+    def get_value(self, form):
         newvalue = form.cleaned_data.get('field_%s' % self.pk)
         if 'multiple' in self.type:
             newvalue = u'|'.join(sorted(newvalue))
+        return newvalue
+
+    def update_value(self, form):
+        newvalue = self.get_value(form)
         if newvalue != self.value:
             self.value = newvalue or u''
             self.save()
