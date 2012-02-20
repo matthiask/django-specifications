@@ -120,6 +120,7 @@ class SpecificationFieldBase(models.Model):
 
     def update_fields_on(self, instance):
         instance.name = self.name
+        instance.key = self.key
         instance.type = self.type
         instance.choices = self.choices
         instance.help_text = self.help_text
