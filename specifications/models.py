@@ -93,6 +93,7 @@ class SpecificationFieldBase(models.Model):
     TYPE_CHOICES = [r[0:2] for r in TYPES]
 
     name = models.CharField(_('name'), max_length=100)
+    key = models.CharField(_('key'), max_length=20)
     type = models.CharField(_('type'), max_length=20, choices=TYPE_CHOICES)
     choices = models.TextField(_('choices'), blank=True,
         help_text=_('One choice per line (if applicable).'))
