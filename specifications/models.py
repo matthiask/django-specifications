@@ -28,9 +28,9 @@ class Specification(models.Model):
         instance_field_model = instance.fields.model
 
         for spec in self.fields.all():
-            if spec.pk in existing:
-                field = existing[spec.pk]
-            else:
+            try:
+                field = existing.pop(spec.pk)
+            except KeyError:
                 field = instance_field_model(
                     parent=instance,
                     field=spec,
@@ -38,6 +38,9 @@ class Specification(models.Model):
 
             spec.update_fields_on(field)
             field.save()
+
+        for field in existing.values():
+            field.delete()
 
 
 class SpecificationFieldGroup(models.Model):
