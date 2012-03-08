@@ -206,7 +206,7 @@ class SpecificationValueFieldBase(SpecificationFieldBase):
                     continue
                 choices.append((v, v))
 
-        return tuple(choices)
+        return list(choices)
 
     def formfield(self, form=None):
         kwargs = dict(label=self.name, required=self.required, help_text=self.help_text)
