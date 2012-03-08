@@ -217,12 +217,11 @@ class SpecificationValueFieldBase(SpecificationFieldBase):
                 kwargs['initial'] = self.value
         if self.choices or 'open_set' in self.type:
             choices = self.get_choices()
-            if 'extensible' not in self.type:
+            if self.type == 'open_set_single':
                 # Ensure the current value is available too
 
-                if form and form.instance and form.instance.type not in dict(choices):
-                    choices = ([(form.instance.type, form.instance.type)] +
-                              self.fields['type'].widget.choices)
+                if form and form.instance and kwargs.get('initial') and kwargs['initial'] not in dict(choices):
+                    choices = [(kwargs['initial'], kwargs['initial'])] + choices
             kwargs['choices'] = choices
 
         return self.get_type(**kwargs)
