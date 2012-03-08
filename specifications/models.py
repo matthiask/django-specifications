@@ -74,6 +74,7 @@ class SpecificationFieldBase(models.Model):
     CLOSED_SET_SINGLE = 'closed_set_single'
     CLOSED_SET_MULTIPLE = 'closed_set_multiple'
     OPEN_SET_SINGLE = 'open_set_single'
+    OPEN_SET_SINGLE_EXTENSIBLE = 'open_set_single_extensible'
     # OPEN_SET_MULTIPLE = 'open_set_multiple'
     # Currently disabled, let's hope nobody ever needs this :-)
     # Otherwise, look into towel's multiple autocompletion widget
@@ -89,6 +90,7 @@ class SpecificationFieldBase(models.Model):
         (CLOSED_SET_MULTIPLE, _('closed set (multiple)'),
             curry(forms.MultipleChoiceField, widget=forms.CheckboxSelectMultiple)),
         (OPEN_SET_SINGLE, _('open set'), open_set_formfield),
+        (OPEN_SET_SINGLE_EXTENSIBLE, ('open set (extensible)'), open_set_formfield),
         #(OPEN_SET_MULTIPLE, _('Open set (multiple)'),
         #    curry(forms.MultipleChoiceField, widget=forms.CheckboxSelectMultiple)),
         )
@@ -97,7 +99,7 @@ class SpecificationFieldBase(models.Model):
 
     name = models.CharField(_('name'), max_length=100)
     key = models.CharField(_('key'), max_length=20)
-    type = models.CharField(_('type'), max_length=20, choices=TYPE_CHOICES)
+    type = models.CharField(_('type'), max_length=30, choices=TYPE_CHOICES)
     choices = models.TextField(_('choices'), blank=True,
         help_text=_('One choice per line (if applicable).'))
     help_text = models.CharField(_('help text'), max_length=100, blank=True,
@@ -187,9 +189,9 @@ class SpecificationValueFieldBase(SpecificationFieldBase):
     def get_choices(self):
         get_tuple = lambda value: (slugify(value.strip()), value.strip())
         choices = [get_tuple(value) for value in self.choices.splitlines() if value.strip()]
-        if not self.required and self.type in ('open_set_single',):
+        if not self.required and self.type in ('open_set_single', 'open_set_single_extensible'):
             choices = BLANK_CHOICE_DASH + choices
-        if 'open_set' in self.type:
+        if 'extensible' in self.type:
             values = cache.get(self.choices_cache_key)
             if not values:
                 # Cannot use self.field.values... because of related_name clashes when
@@ -206,7 +208,7 @@ class SpecificationValueFieldBase(SpecificationFieldBase):
 
         return tuple(choices)
 
-    def formfield(self):
+    def formfield(self, form=None):
         kwargs = dict(label=self.name, required=self.required, help_text=self.help_text)
         if self.value:
             if 'multiple' in self.type:
@@ -214,7 +216,15 @@ class SpecificationValueFieldBase(SpecificationFieldBase):
             else:
                 kwargs['initial'] = self.value
         if self.choices or 'open_set' in self.type:
-            kwargs['choices'] = self.get_choices()
+            choices = self.get_choices()
+            if 'extensible' not in self.type:
+                # Ensure the current value is available too
+
+                if form and form.instance and form.instance.type not in dict(choices):
+                    choices = ([(form.instance.type, form.instance.type)] +
+                              self.fields['type'].widget.choices)
+            kwargs['choices'] = choices
+
         return self.get_type(**kwargs)
 
     def add_formfield(self, form):
@@ -223,7 +233,7 @@ class SpecificationValueFieldBase(SpecificationFieldBase):
         ``BoundField`` instance.
         """
         key = 'field_%s' % self.pk
-        form.fields[key] = self.formfield()
+        form.fields[key] = self.formfield(form=form)
         return form[key]
 
     def get_value(self, form):
