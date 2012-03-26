@@ -154,7 +154,7 @@ class SpecificationField(SpecificationFieldBase):
 class SpecificationValueFieldBase(SpecificationFieldBase):
     field = models.ForeignKey(SpecificationField, verbose_name=_('specification field'),
         related_name='+', blank=True, null=True, on_delete=models.SET_NULL)
-    value = models.CharField(_('value'), max_length=100, default=u'')
+    value = models.TextField(_('value'), default=u'')
 
     class Meta:
         abstract = True
