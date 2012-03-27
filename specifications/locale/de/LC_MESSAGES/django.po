@@ -1,0 +1,123 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-03-27 11:43+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+
+#: admin.py:34
+msgid "Cannot set choices when not using a set type."
+msgstr "Auswahlen sind nur für Mengentypen erlaubt."
+
+#: admin.py:38
+msgid "Please provide at least one choice when using a closed set."
+msgstr "Für geschlossene Mengen bitte mindestens eine Auswahl angeben."
+
+#: models.py:11 models.py:49 models.py:100
+msgid "name"
+msgstr "Name"
+
+#: models.py:12
+msgid "notes"
+msgstr "Bemerkungen"
+
+#: models.py:16 models.py:47 models.py:137
+msgid "specification"
+msgstr "Spezifikation"
+
+#: models.py:17
+msgid "specifications"
+msgstr "Spezifikationen"
+
+#: models.py:50 models.py:109
+msgid "ordering"
+msgstr "Sortierung"
+
+#: models.py:54
+msgid "specification field group"
+msgstr "Spezifikationsfeldgruppe"
+
+#: models.py:55
+msgid "specification field groups"
+msgstr "Spezifikationsfeldgruppen"
+
+#: models.py:83
+msgid "text"
+msgstr "Text"
+
+#: models.py:84
+msgid "long text"
+msgstr "Langer Text"
+
+#: models.py:86
+msgid "boolean"
+msgstr "Ja/Nein"
+
+#: models.py:87
+msgid "integer"
+msgstr "Ganzzahl"
+
+#: models.py:88
+msgid "closed set"
+msgstr "Geschlossene Menge"
+
+#: models.py:90
+msgid "closed set (multiple)"
+msgstr "Geschlossene Menge (Mehrfachauswahl)"
+
+#: models.py:92
+msgid "open set"
+msgstr "Offene Menge"
+
+#: models.py:101
+msgid "key"
+msgstr "Schlüssel"
+
+#: models.py:102
+msgid "type"
+msgstr "Typ"
+
+#: models.py:103
+msgid "choices"
+msgstr "Auswahl"
+
+#: models.py:104
+msgid "One choice per line (if applicable)."
+msgstr "Eine Auswahl pro Zeile (falls zutreffend)."
+
+#: models.py:105
+msgid "help text"
+msgstr "Hilfstext"
+
+#: models.py:107
+msgid "required"
+msgstr "notwendig"
+
+#: models.py:139
+msgid "group"
+msgstr "Gruppe"
+
+#: models.py:144 models.py:155
+msgid "specification field"
+msgstr "Spezifikationsfeld"
+
+#: models.py:145
+msgid "specification fields"
+msgstr "Spezifikationsfelder"
+
+#: models.py:157
+msgid "value"
+msgstr "Wert"
