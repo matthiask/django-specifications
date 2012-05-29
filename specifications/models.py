@@ -231,7 +231,11 @@ class SpecificationValueFieldBase(SpecificationFieldBase):
         Adds the specification field to the form and returns the corresponding
         ``BoundField`` instance.
         """
-        key = 'field_%s' % self.pk
+        if self.field:
+            key = 'field_%s' % self.field.pk
+        else:
+            key = 'field_%s' % self.pk
+
         form.fields[key] = self.formfield(form=form)
         return form[key]
 
