@@ -241,6 +241,8 @@ class SpecificationValueFieldBase(SpecificationFieldBase):
 
     def get_value(self, form):
         newvalue = form.cleaned_data.get('field_%s' % self.pk)
+        if newvalue is None:
+            return u''
         if 'multiple' in self.type:
             newvalue = u'|'.join(sorted(newvalue))
         return newvalue
