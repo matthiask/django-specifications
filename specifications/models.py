@@ -226,21 +226,20 @@ class SpecificationValueFieldBase(SpecificationFieldBase):
 
         return self.get_type(**kwargs)
 
+    def formfield_name(self):
+        return 'field_%s' % (self.field.pk if self.field else self.pk)
+
     def add_formfield(self, form):
         """
         Adds the specification field to the form and returns the corresponding
         ``BoundField`` instance.
         """
-        if self.field:
-            key = 'field_%s' % self.field.pk
-        else:
-            key = 'field_%s' % self.pk
-
+        key = self.formfield_name()
         form.fields[key] = self.formfield(form=form)
         return form[key]
 
     def get_value(self, form):
-        newvalue = form.cleaned_data.get('field_%s' % self.pk)
+        newvalue = form.cleaned_data.get(self.formfield_name())
         if newvalue is None:
             return u''
         if 'multiple' in self.type:
