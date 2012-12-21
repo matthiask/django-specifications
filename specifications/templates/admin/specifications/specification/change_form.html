@@ -1,0 +1,10 @@
+{% extends "admin/change_form.html" %}
+
+{% block extrahead %}{{ block.super }}
+<style>
+/* use up less space in the fields list */
+#fields-group .vLargeTextField { width: 16em; height: 8em; }
+#fields-group input[type=text], #fields-group select { width: 16em; }
+#fields-group input[type=text].vIntegerField { width: 6em; }
+</style>
+{% endblock %}
