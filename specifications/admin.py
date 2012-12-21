@@ -45,7 +45,7 @@ class SpecificationFieldInline(admin.TabularInline):
     form = SpecificationFieldForm
     extra = 0
     # All fields, but different ordering:
-    fields = ('group', 'name', 'key', 'type', 'choices', 'help_text', 'required', 'ordering')
+    fields = ('group', 'name', 'type', 'choices', 'help_text', 'required', 'ordering')
 
 
 admin.site.register(models.Specification,

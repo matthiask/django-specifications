@@ -28,5 +28,5 @@ class FormWithSpecification(forms.ModelForm):
 
         values = {}
         for field in self.instance.fields.all():
-            values[field.key] = field.get_value(self)
+            values[field.fullname] = field.get_value(self)
         return values

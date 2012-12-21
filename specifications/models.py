@@ -98,7 +98,6 @@ class SpecificationFieldBase(models.Model):
     TYPE_CHOICES = [r[0:2] for r in TYPES]
 
     name = models.CharField(_('name'), max_length=100)
-    key = models.CharField(_('key'), max_length=20)
     type = models.CharField(_('type'), max_length=30, choices=TYPE_CHOICES)
     choices = models.TextField(_('choices'), blank=True,
         help_text=_('One choice per line (if applicable).'))
@@ -125,7 +124,6 @@ class SpecificationFieldBase(models.Model):
 
     def update_fields_on(self, instance):
         instance.name = self.name
-        instance.key = self.key
         instance.type = self.type
         instance.choices = self.choices
         instance.help_text = self.help_text
