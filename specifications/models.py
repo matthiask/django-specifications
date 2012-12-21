@@ -234,9 +234,9 @@ class SpecificationValueFieldBase(SpecificationFieldBase):
         Adds the specification field to the form and returns the corresponding
         ``BoundField`` instance.
         """
-        key = self.formfield_name()
-        form.fields[key] = self.formfield(form=form)
-        return form[key]
+        field_name = self.formfield_name()
+        form.fields[field_name] = self.formfield(form=form)
+        return form[field_name]
 
     def get_value(self, form):
         newvalue = form.cleaned_data.get(self.formfield_name())
