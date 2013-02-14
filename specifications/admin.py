@@ -33,7 +33,7 @@ class SpecificationFieldForm(forms.ModelForm):
         if data.get('choices') and '_set_' not in data.get('type'):
             raise forms.ValidationError(_('Cannot set choices when not using a set type.'))
 
-        if 'closed_set' in data.get('type') and not data.get('choices'):
+        if 'closed_set' in data.get('type', '') and not data.get('choices'):
             raise forms.ValidationError(
                 _('Please provide at least one choice when using a closed set.'))
 
