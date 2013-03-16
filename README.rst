@@ -10,9 +10,9 @@ Usage
 =====
 
 1. Add ``'specifications'`` to ``INSTALLED_APPS``.
-2. Create a ``ForeignKey('specifications.Specification')`` on the model you
-   want to use specifications with. The foreign key can be nullable or
-   required, as you wish.
+2. Create a ``specification = ForeignKey('specifications.Specification')`` 
+   on the model you want to use specifications with. The foreign key can 
+   be nullable or required, as you wish.
 3. Create the place where the specification field data is actually stored::
 
        from specifications.models import SpecificationValueFieldBase
