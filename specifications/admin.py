@@ -31,11 +31,12 @@ class SpecificationFieldForm(forms.ModelForm):
         data = super(SpecificationFieldForm, self).clean()
 
         if data.get('choices') and '_set_' not in data.get('type'):
-            raise forms.ValidationError(_('Cannot set choices when not using a set type.'))
+            raise forms.ValidationError(_(
+                'Cannot set choices when not using a set type.'))
 
         if 'closed_set' in data.get('type', '') and not data.get('choices'):
-            raise forms.ValidationError(
-                _('Please provide at least one choice when using a closed set.'))
+            raise forms.ValidationError(_(
+                'Please provide at least one choice when using a closed set.'))
 
         return data
 
@@ -45,9 +46,12 @@ class SpecificationFieldInline(admin.TabularInline):
     form = SpecificationFieldForm
     extra = 0
     # All fields, but different ordering:
-    fields = ('group', 'name', 'type', 'choices', 'help_text', 'required', 'ordering')
+    fields = (
+        'group', 'name', 'type', 'choices', 'help_text', 'required',
+        'ordering')
 
 
-admin.site.register(models.Specification,
+admin.site.register(
+    models.Specification,
     inlines=[SpecificationFieldGroupInline, SpecificationFieldInline],
-    )
+)

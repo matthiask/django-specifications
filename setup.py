@@ -1,24 +1,41 @@
 #!/usr/bin/env python
 
-from distutils.core import setup
 import os
-import setuplib
+from setuptools import setup, find_packages
 
-packages, package_data = setuplib.find_packages('specifications')
 
-setup(name='django-specifications',
+def read(filename):
+    return open(os.path.join(os.path.dirname(__file__), filename)).read()
+
+
+setup(
+    name='django-specifications',
     version=__import__('specifications').__version__,
     description='Additional, dynamic fields for all Django models.',
-    long_description=open(os.path.join(os.path.dirname(__file__), 'README.rst')).read(),
+    long_description=read('README.rst'),
     author='Matthias Kestenholz',
     author_email='mk@feinheit.ch',
     url='http://github.com/matthiask/django-specifications/',
     license='BSD License',
     platforms=['OS Independent'],
-    packages=packages,
-    package_data=package_data,
+    packages=find_packages(),
+    package_data={
+        '': ['*.html', '*.txt'],
+        'specifications': [
+            'locale/*/*/*.*',
+            # 'static/specifications/*.*',
+            # 'static/specifications/*/*.*',
+            'templates/*.*',
+            'templates/*/*.*',
+            'templates/*/*/*.*',
+            'templates/*/*/*/*.*',
+        ],
+    },
+    install_requires=[
+        'Django>=1.4.2',
+    ],
     classifiers=[
-        'Development Status :: 5 - Production/Stable',
+        # 'Development Status :: 5 - Production/Stable',
         'Environment :: Web Environment',
         'Framework :: Django',
         'Intended Audience :: Developers',
@@ -29,4 +46,5 @@ setup(name='django-specifications',
         'Topic :: Software Development',
         'Topic :: Software Development :: Libraries :: Application Frameworks',
     ],
+    zip_safe=False,
 )

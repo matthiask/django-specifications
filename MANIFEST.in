@@ -1,0 +1,6 @@
+include LICENSE
+include MANIFEST.in
+include README.rst
+recursive-include specifications/static *
+recursive-include specifications/locale *
+recursive-include specifications/templates *

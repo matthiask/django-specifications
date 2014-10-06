@@ -44,7 +44,8 @@ class Specification(models.Model):
 
 
 class SpecificationFieldGroup(models.Model):
-    specification = models.ForeignKey(Specification, verbose_name=_('specification'),
+    specification = models.ForeignKey(
+        Specification, verbose_name=_('specification'),
         related_name='groups')
     name = models.CharField(_('name'), max_length=100)
     ordering = models.IntegerField(_('ordering'), default=0)
@@ -88,21 +89,25 @@ class SpecificationFieldBase(models.Model):
         (CLOSED_SET_SINGLE, _('closed set'),
             curry(forms.ChoiceField, widget=forms.RadioSelect)),
         (CLOSED_SET_MULTIPLE, _('closed set (multiple)'),
-            curry(forms.MultipleChoiceField, widget=forms.CheckboxSelectMultiple)),
+            curry(forms.MultipleChoiceField,
+                  widget=forms.CheckboxSelectMultiple)),
         (OPEN_SET_SINGLE, _('open set'), open_set_formfield),
-        (OPEN_SET_SINGLE_EXTENSIBLE, ('open set (extensible)'), open_set_formfield),
-        #(OPEN_SET_MULTIPLE, _('Open set (multiple)'),
-        #    curry(forms.MultipleChoiceField, widget=forms.CheckboxSelectMultiple)),
+        (OPEN_SET_SINGLE_EXTENSIBLE, ('open set (extensible)'),
+            open_set_formfield),
+        # (OPEN_SET_MULTIPLE, _('Open set (multiple)'),
+        #     curry(forms.MultipleChoiceField,
+        #           widget=forms.CheckboxSelectMultiple)),
         )
 
     TYPE_CHOICES = [r[0:2] for r in TYPES]
 
     name = models.CharField(_('name'), max_length=100)
     type = models.CharField(_('type'), max_length=30, choices=TYPE_CHOICES)
-    choices = models.TextField(_('choices'), blank=True,
+    choices = models.TextField(
+        _('choices'), blank=True,
         help_text=_('One choice per line (if applicable).'))
-    help_text = models.CharField(_('help text'), max_length=100, blank=True,
-        default='')
+    help_text = models.CharField(
+        _('help text'), max_length=100, blank=True, default='')
     required = models.BooleanField(_('required'))
 
     ordering = models.IntegerField(_('ordering'), default=0)
@@ -132,10 +137,13 @@ class SpecificationFieldBase(models.Model):
 
 
 class SpecificationField(SpecificationFieldBase):
-    specification = models.ForeignKey(Specification, verbose_name=_('specification'),
+    specification = models.ForeignKey(
+        Specification, verbose_name=_('specification'),
         related_name='fields')
-    group = models.ForeignKey(SpecificationFieldGroup, verbose_name=_('group'),
-        related_name='fields', blank=True, null=True, on_delete=models.SET_NULL)
+    group = models.ForeignKey(
+        SpecificationFieldGroup, verbose_name=_('group'),
+        related_name='fields', blank=True, null=True,
+        on_delete=models.SET_NULL)
 
     class Meta:
         ordering = ['group__ordering', 'ordering']
@@ -150,7 +158,8 @@ class SpecificationField(SpecificationFieldBase):
 
 
 class SpecificationValueFieldBase(SpecificationFieldBase):
-    field = models.ForeignKey(SpecificationField, verbose_name=_('specification field'),
+    field = models.ForeignKey(
+        SpecificationField, verbose_name=_('specification field'),
         related_name='+', blank=True, null=True, on_delete=models.SET_NULL)
     value = models.TextField(_('value'), default=u'')
 
@@ -186,16 +195,23 @@ class SpecificationValueFieldBase(SpecificationFieldBase):
 
     def get_choices(self):
         get_tuple = lambda value: (slugify(value.strip()), value.strip())
-        choices = [get_tuple(value) for value in self.choices.splitlines() if value.strip()]
-        if not self.required and self.type in ('open_set_single', 'open_set_single_extensible'):
+        choices = [
+            get_tuple(value)
+            for value in self.choices.splitlines()
+            if value.strip()]
+
+        if not self.required and self.type in (
+                'open_set_single', 'open_set_single_extensible'):
             choices = BLANK_CHOICE_DASH + choices
         if 'extensible' in self.type:
             values = cache.get(self.choices_cache_key)
             if not values:
-                # Cannot use self.field.values... because of related_name clashes when
-                # several subclasses of SpecificationValueFieldBase exist
+                # Cannot use self.field.values... because of related_name
+                # clashes when several subclasses of
+                # SpecificationValueFieldBase exist
                 values = self.__class__.objects.filter(
-                    field=self.field).values_list('value', flat=True).order_by('value').distinct()
+                    field=self.field
+                ).values_list('value', flat=True).order_by('value').distinct()
                 cache.set(self.choices_cache_key, values)
 
             existing = dict(choices)
@@ -207,7 +223,11 @@ class SpecificationValueFieldBase(SpecificationFieldBase):
         return list(choices)
 
     def formfield(self, form=None):
-        kwargs = dict(label=self.name, required=self.required, help_text=self.help_text)
+        kwargs = dict(
+            label=self.name,
+            required=self.required,
+            help_text=self.help_text)
+
         if self.value:
             if 'multiple' in self.type:
                 kwargs['initial'] = self.value.split('|')
@@ -218,8 +238,13 @@ class SpecificationValueFieldBase(SpecificationFieldBase):
             if self.type == 'open_set_single':
                 # Ensure the current value is available too
 
-                if form and form.instance and kwargs.get('initial') and kwargs['initial'] not in dict(choices):
-                    choices = [(kwargs['initial'], kwargs['initial'])] + choices
+                if (form
+                        and form.instance
+                        and kwargs.get('initial')
+                        and kwargs['initial'] not in dict(choices)):
+                    choices = [
+                        (kwargs['initial'], kwargs['initial'])
+                    ] + choices
             kwargs['choices'] = choices
 
         return self.get_type(**kwargs)
@@ -254,7 +279,8 @@ class SpecificationValueFieldBase(SpecificationFieldBase):
         if self.value and (self.choices or 'open_set' in self.type):
             choices = dict(self.get_choices())
             if 'multiple' in self.type:
-                return u', '.join(choices.get(v, v) for v in self.value.split('|'))
+                return u', '.join(
+                    choices.get(v, v) for v in self.value.split('|'))
             else:
                 return choices.get(self.value, self.value)
         return self.value
@@ -274,4 +300,4 @@ class SpecificationValueFieldBase(SpecificationFieldBase):
             ordering=self.ordering,
             field=self.field,
             value=self.value,
-            )
+        )

@@ -23,7 +23,9 @@ class FormWithSpecification(forms.ModelForm):
         return instance
 
     def specification_field_values(self):
-        if not (self.instance and self.instance.pk and self.instance.specification):
+        if not (self.instance
+                and self.instance.pk
+                and self.instance.specification):
             return {}
 
         values = {}
