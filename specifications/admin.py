@@ -13,6 +13,7 @@ class SpecificationFieldGroupInline(admin.TabularInline):
 class SpecificationFieldForm(forms.ModelForm):
     class Meta:
         model = models.SpecificationField
+        fields = '__all__'
 
     def __init__(self, *args, **kwargs):
         super(SpecificationFieldForm, self).__init__(*args, **kwargs)
