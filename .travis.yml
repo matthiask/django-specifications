@@ -8,8 +8,11 @@ env:
 - REQ="Django>=2.1,<2.2"
 - REQ="Django>=2.0,<2.1"
 - REQ="Django>=1.11,<2.0"
+- REQ="Django>=1.8,<1.9"
 matrix:
   exclude:
+    - python: "3.6"
+      env: REQ="Django>=1.8,<1.9"
     - python: "2.7"
       env: REQ="Django>=2.1,<2.2"
     - python: "2.7"
