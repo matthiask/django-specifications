@@ -17,6 +17,7 @@ class StuffAdmin(admin.ModelAdmin):
         # adminform helper, not when creating the modelform (because obviously
         # the model and its form will not know about additional fields)
         import inspect
+
         creating_adminform = "to_field" in inspect.currentframe().f_back.f_locals
 
         if creating_adminform and obj is not None and obj.specification:
