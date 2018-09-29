@@ -1,14 +1,15 @@
 from __future__ import unicode_literals
 
+from collections import OrderedDict
+
 from django import forms
-from django.utils.datastructures import SortedDict
 
 
 class FormWithSpecification(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(FormWithSpecification, self).__init__(*args, **kwargs)
 
-        self.specification_fields = SortedDict()
+        self.specification_fields = OrderedDict()
         if self.instance and self.instance.pk and self.instance.specification:
             self.instance.specification.update_fields(self.instance)
             for field in self.instance.fields.select_related("field__group"):
