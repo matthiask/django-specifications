@@ -9,9 +9,10 @@ class FormWithSpecification(forms.ModelForm):
         self.specification_fields = SortedDict()
         if self.instance and self.instance.pk and self.instance.specification:
             self.instance.specification.update_fields(self.instance)
-            for field in self.instance.fields.select_related('field__group'):
+            for field in self.instance.fields.select_related("field__group"):
                 self.specification_fields.setdefault(field.group, []).append(
-                    field.add_formfield(self))
+                    field.add_formfield(self)
+                )
 
     def save(self, *args, **kwargs):
         instance = super(FormWithSpecification, self).save(*args, **kwargs)
@@ -23,9 +24,7 @@ class FormWithSpecification(forms.ModelForm):
         return instance
 
     def specification_field_values(self):
-        if not (self.instance
-                and self.instance.pk
-                and self.instance.specification):
+        if not (self.instance and self.instance.pk and self.instance.specification):
             return {}
 
         values = {}
