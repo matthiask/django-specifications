@@ -12,3 +12,4 @@
 .coverage
 .tox
 htmlcov
+build
