@@ -70,11 +70,11 @@ class SpecificationsTest(TestCase):
         stuff = Stuff.objects.create(specification=spec)
 
         client = self.login()
-        response = client.get("/admin/testapp/stuff/{}/change/".format(stuff.pk))
-        print(response.content.decode("utf-8"))
 
         response = client.get("/admin/testapp/stuff/{}/change/".format(stuff.pk))
         self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "8 GB")
 
         response = client.get("/admin/testapp/stuff/add/")
         self.assertEqual(response.status_code, 200)
+        self.assertNotContains(response, "8 GB")

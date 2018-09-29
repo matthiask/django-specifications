@@ -1,9 +1,12 @@
 from __future__ import unicode_literals
 
+import inspect
+
 from django import forms
 from django.contrib import admin
 from django.utils.translation import ugettext as _
 
+from specifications.forms import FormWithSpecification
 from specifications import models
 
 
@@ -22,8 +25,6 @@ class SpecificationFieldForm(forms.ModelForm):
 
         try:
             # DON'T LOOK! WAAAH
-            import inspect
-
             instance = inspect.currentframe().f_back.f_locals["self"].instance
         except KeyError:
             instance = None
@@ -59,3 +60,32 @@ admin.site.register(
     models.Specification,
     inlines=[SpecificationFieldGroupInline, SpecificationFieldInline],
 )
+
+
+class ModelAdminWithSpecification(admin.ModelAdmin):
+    form = FormWithSpecification
+
+    def get_fieldsets(self, request, obj=None):
+        fieldsets = super(ModelAdminWithSpecification, self).get_fieldsets(request, obj)
+        if obj is None:
+            return fieldsets
+
+        # Is the ModelForm already defined? Then we are currently creating
+        # the adminform helper. In this case, return a fieldset including
+        # the specifications' fields. (If we did this for creating the initial
+        # ModelForm the creation would fail because of unknown model fields.)
+        frame = inspect.currentframe()
+        try:
+            while frame:
+                ModelForm = frame.f_locals.get("ModelForm")
+                if ModelForm is not None:
+                    return self.get_fieldsets_with_specification(
+                        request, obj, fieldsets
+                    )
+                frame = frame.f_back
+        finally:
+            del frame
+        return fieldsets
+
+    def get_fieldsets_with_specification(self, request, obj, fieldsets):
+        return fieldsets
