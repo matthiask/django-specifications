@@ -1,3 +1,5 @@
+from __future__ import unicode_literals
+
 from django import forms
 from django.core.cache import cache
 from django.db import models
@@ -42,7 +44,10 @@ class Specification(models.Model):
 
 class SpecificationFieldGroup(models.Model):
     specification = models.ForeignKey(
-        Specification, verbose_name=_("specification"), related_name="groups"
+        Specification,
+        on_delete=models.CASCADE,
+        verbose_name=_("specification"),
+        related_name="groups",
     )
     name = models.CharField(_("name"), max_length=100)
     ordering = models.IntegerField(_("ordering"), default=0)
@@ -135,15 +140,18 @@ class SpecificationFieldBase(models.Model):
 
 class SpecificationField(SpecificationFieldBase):
     specification = models.ForeignKey(
-        Specification, verbose_name=_("specification"), related_name="fields"
+        Specification,
+        on_delete=models.CASCADE,
+        verbose_name=_("specification"),
+        related_name="fields",
     )
     group = models.ForeignKey(
         SpecificationFieldGroup,
+        on_delete=models.SET_NULL,
         verbose_name=_("group"),
         related_name="fields",
         blank=True,
         null=True,
-        on_delete=models.SET_NULL,
     )
 
     class Meta:
@@ -154,20 +162,20 @@ class SpecificationField(SpecificationFieldBase):
     @property
     def fullname(self):
         if self.group:
-            return u"%s - %s" % (self.group, self.name)
+            return "%s - %s" % (self.group, self.name)
         return self.name
 
 
 class SpecificationValueFieldBase(SpecificationFieldBase):
     field = models.ForeignKey(
         SpecificationField,
+        on_delete=models.SET_NULL,
         verbose_name=_("specification field"),
         related_name="+",
         blank=True,
         null=True,
-        on_delete=models.SET_NULL,
     )
-    value = models.TextField(_("value"), default=u"")
+    value = models.TextField(_("value"), default="")
 
     class Meta:
         abstract = True
@@ -274,22 +282,22 @@ class SpecificationValueFieldBase(SpecificationFieldBase):
     def get_value(self, form):
         newvalue = form.cleaned_data.get(self.formfield_name())
         if newvalue is None:
-            return u""
+            return ""
         if "multiple" in self.type:
-            newvalue = u"|".join(sorted(newvalue))
+            newvalue = "|".join(sorted(newvalue))
         return newvalue
 
     def update_value(self, form):
         newvalue = self.get_value(form)
         if newvalue != self.value:
-            self.value = newvalue or u""
+            self.value = newvalue or ""
             self.save()
 
     def get_value_display(self):
         if self.value and (self.choices or "open_set" in self.type):
             choices = dict(self.get_choices())
             if "multiple" in self.type:
-                return u", ".join(choices.get(v, v) for v in self.value.split("|"))
+                return ", ".join(choices.get(v, v) for v in self.value.split("|"))
             else:
                 return choices.get(self.value, self.value)
         return self.value
