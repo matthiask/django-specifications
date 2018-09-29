@@ -114,7 +114,7 @@ class SpecificationFieldBase(models.Model):
         _("choices"), blank=True, help_text=_("One choice per line (if applicable).")
     )
     help_text = models.CharField(_("help text"), max_length=100, blank=True, default="")
-    required = models.BooleanField(_("required"))
+    required = models.BooleanField(_("required"), default=True)
 
     ordering = models.IntegerField(_("ordering"), default=0)
 

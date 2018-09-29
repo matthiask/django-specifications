@@ -76,7 +76,7 @@ class Migration(migrations.Migration):
                         blank=True, default="", max_length=100, verbose_name="help text"
                     ),
                 ),
-                ("required", models.BooleanField(verbose_name="required")),
+                ("required", models.BooleanField(verbose_name="required", default=True)),
                 ("ordering", models.IntegerField(default=0, verbose_name="ordering")),
             ],
             options={
