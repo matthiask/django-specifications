@@ -1,6 +1,11 @@
 from django.contrib.auth.models import User
 from django.test import Client, TestCase
 
+try:
+    from django.urls import reverse
+except ImportError:  # pragma: no cover
+    from django.core.urlresolvers import reverse
+
 from specifications.models import Specification, SpecificationField
 from specifications.utils import specification_values_dict
 
@@ -10,10 +15,8 @@ from testapp.models import Stuff
 class SpecificationsTest(TestCase):
     def login(self):
         client = Client()
-        self.user = User.objects.create(
-            username="test", is_staff=True, is_superuser=True
-        )
-        client.force_login(self.user)
+        self.user = User.objects.create_superuser("test", "test@example.com", "test")
+        client.login(username="test", password="test")
         return client
 
     def create_specification(self):
@@ -63,7 +66,7 @@ class SpecificationsTest(TestCase):
 
         spec.update_fields(stuff)
 
-        print(specification_values_dict(stuff))
+        self.assertNotEqual(dict(specification_values_dict(stuff)), {})
 
     def test_admin(self):
         spec = self.create_specification()
@@ -71,7 +74,7 @@ class SpecificationsTest(TestCase):
 
         client = self.login()
 
-        response = client.get("/admin/testapp/stuff/{}/change/".format(stuff.pk))
+        response = client.get(reverse("admin:testapp_stuff_change", args=(stuff.pk,)))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "8 GB")
 
