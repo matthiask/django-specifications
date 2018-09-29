@@ -1,8 +1,6 @@
 from __future__ import unicode_literals
 
-from collections import defaultdict
-
-from django.utils.datastructures import SortedDict
+from collections import OrderedDict, defaultdict
 
 
 def specification_values_dict(instance):
@@ -10,7 +8,7 @@ def specification_values_dict(instance):
     Returns a dictionary suitable for outputting the specification field
     values.
     """
-    groups = SortedDict()
+    groups = OrderedDict()
     for field in instance.fields.select_related("field__group"):
         groups.setdefault(field.group, []).append(
             (field.name, field.get_value_display())
