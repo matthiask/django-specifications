@@ -171,14 +171,19 @@ class SpecificationValueFieldBase(SpecificationFieldBase):
 
     class Meta:
         abstract = True
+        ordering = ["field__group__ordering", "ordering"]
 
     def save(self, *args, **kwargs):
         super(SpecificationValueFieldBase, self).save(*args, **kwargs)
         self.clobber_choices_cache()
 
+    save.alters_data = True
+
     def delete(self, *args, **kwargs):
         super(SpecificationValueFieldBase, self).delete(*args, **kwargs)
         self.clobber_choices_cache()
+
+    save.alters_data = True
 
     @property
     def choices_cache_key(self):
