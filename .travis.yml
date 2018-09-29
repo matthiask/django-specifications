@@ -3,7 +3,6 @@ sudo: false
 cache: pip
 python:
 - "3.6"
-- "3.5"
 - "2.7"
 env:
 - REQ="Django>=2.1,<2.2"
@@ -12,8 +11,6 @@ env:
 matrix:
   exclude:
     - python: "3.6"
-      env: REQ="Django>=1.11,<2.0"
-    - python: "3.5"
       env: REQ="Django>=1.11,<2.0"
 install:
 - pip install -U pip setuptools wheel
