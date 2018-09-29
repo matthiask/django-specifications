@@ -5,10 +5,12 @@ from django.core.cache import cache
 from django.db import models
 from django.db.models.fields import BLANK_CHOICE_DASH
 from django.template.defaultfilters import slugify
+from django.utils.encoding import python_2_unicode_compatible
 from django.utils.functional import curry
 from django.utils.translation import ugettext_lazy as _
 
 
+@python_2_unicode_compatible
 class Specification(models.Model):
     name = models.CharField(_("name"), max_length=100)
     notes = models.TextField(_("notes"), blank=True)
@@ -18,7 +20,7 @@ class Specification(models.Model):
         verbose_name = _("specification")
         verbose_name_plural = _("specifications")
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
     def update_fields(self, instance):
@@ -42,6 +44,7 @@ class Specification(models.Model):
             field.delete()
 
 
+@python_2_unicode_compatible
 class SpecificationFieldGroup(models.Model):
     specification = models.ForeignKey(
         Specification,
@@ -57,7 +60,7 @@ class SpecificationFieldGroup(models.Model):
         verbose_name = _("specification field group")
         verbose_name_plural = _("specification field groups")
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
 
@@ -67,6 +70,7 @@ def open_set_formfield(**kwargs):
     return forms.CharField(**kwargs)
 
 
+@python_2_unicode_compatible
 class SpecificationFieldBase(models.Model):
     TEXT = "text"
     LONGTEXT = "longtext"
@@ -118,7 +122,7 @@ class SpecificationFieldBase(models.Model):
         abstract = True
         ordering = ["ordering"]
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
     def get_type(self, **kwargs):
@@ -138,6 +142,7 @@ class SpecificationFieldBase(models.Model):
         instance.ordering = self.ordering
 
 
+@python_2_unicode_compatible
 class SpecificationField(SpecificationFieldBase):
     specification = models.ForeignKey(
         Specification,
@@ -159,6 +164,9 @@ class SpecificationField(SpecificationFieldBase):
         verbose_name = _("specification field")
         verbose_name_plural = _("specification fields")
 
+    def __str__(self):
+        return self.fullname
+
     @property
     def fullname(self):
         if self.group:
@@ -166,6 +174,7 @@ class SpecificationField(SpecificationFieldBase):
         return self.name
 
 
+@python_2_unicode_compatible
 class SpecificationValueFieldBase(SpecificationFieldBase):
     field = models.ForeignKey(
         SpecificationField,
@@ -180,6 +189,9 @@ class SpecificationValueFieldBase(SpecificationFieldBase):
     class Meta:
         abstract = True
         ordering = ["field__group__ordering", "ordering"]
+
+    def __str__(self):
+        return self.fullname
 
     def save(self, *args, **kwargs):
         super(SpecificationValueFieldBase, self).save(*args, **kwargs)
