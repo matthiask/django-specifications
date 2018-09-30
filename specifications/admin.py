@@ -69,7 +69,7 @@ admin.site.register(
 class ModelAdminWithSpecification(admin.ModelAdmin):
     form = FormWithSpecification
 
-    def has_specification(self, request, obj):
+    def can_add_specification_fields(self, request, obj):
         if obj is None:
             return False
         # Is the ModelForm already defined? Then we are currently creating
@@ -80,7 +80,7 @@ class ModelAdminWithSpecification(admin.ModelAdmin):
         try:
             while frame:
                 ModelForm = frame.f_locals.get("ModelForm")
-                if ModelForm is not None:
+                if ModelForm is not None and obj.specification:
                     return True
                 frame = frame.f_back
         finally:

@@ -49,7 +49,7 @@ Usage
            def get_fieldsets(self, request, obj=None):
                # Define your fieldsets
                fieldsets = [...]
-               if self.has_specification(request, obj):
+               if self.can_add_specification_fields(request, obj):
                    # Extend your fieldset with specification fields
                    fieldsets.extend(...)
                return fieldsets

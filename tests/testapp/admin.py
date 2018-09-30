@@ -10,7 +10,7 @@ from . import models
 class StuffAdmin(ModelAdminWithSpecification):
     def get_fieldsets(self, request, obj=None):
         fieldsets = super(StuffAdmin, self).get_fieldsets(request, obj)
-        if self.has_specification(request, obj):
+        if self.can_add_specification_fields(request, obj):
             obj.specification.update_fields(obj)
             # TODO groups!
             fieldsets.append(
