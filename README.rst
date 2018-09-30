@@ -40,7 +40,19 @@ Usage
            class Meta:
                model = MyObject
 
-5. There is no fifth step.
+5. If you want to edit models with specifications you might want to use
+   the following snippet::
+
+       from specifications.admin import ModelAdminWithSpecification
+
+       class MyObjectAdmin(ModelAdminWithSpecification):
+           def get_fieldsets(self, request, obj=None):
+               # Define your fieldsets
+               fieldsets = [...]
+               if self.has_specification(request, obj):
+                   # Extend your fieldset with specification fields
+                   fieldsets.extend(...)
+               return fieldsets
 
 The fields are available after saving a specification. The specification can
 be changed, but you risk losing data if you do this.

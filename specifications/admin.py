@@ -69,11 +69,9 @@ admin.site.register(
 class ModelAdminWithSpecification(admin.ModelAdmin):
     form = FormWithSpecification
 
-    def get_fieldsets(self, request, obj=None):
-        fieldsets = super(ModelAdminWithSpecification, self).get_fieldsets(request, obj)
+    def has_specification(self, request, obj):
         if obj is None:
-            return fieldsets
-
+            return False
         # Is the ModelForm already defined? Then we are currently creating
         # the adminform helper. In this case, return a fieldset including
         # the specifications' fields. (If we did this for creating the initial
@@ -83,13 +81,8 @@ class ModelAdminWithSpecification(admin.ModelAdmin):
             while frame:
                 ModelForm = frame.f_locals.get("ModelForm")
                 if ModelForm is not None:
-                    return self.get_fieldsets_with_specification(
-                        request, obj, fieldsets
-                    )
+                    return True
                 frame = frame.f_back
         finally:
             del frame
-        return fieldsets
-
-    def get_fieldsets_with_specification(self, request, obj, fieldsets):
-        return fieldsets
+        return False

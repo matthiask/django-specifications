@@ -8,9 +8,10 @@ from . import models
 
 @admin.register(models.Stuff)
 class StuffAdmin(ModelAdminWithSpecification):
-    def get_fieldsets_with_specification(self, request, obj, fieldsets):
-        if obj is not None and obj.specification:
-            obj.specification.update_fields(obj)  # TODO redundant?
+    def get_fieldsets(self, request, obj=None):
+        fieldsets = super(StuffAdmin, self).get_fieldsets(request, obj)
+        if self.has_specification(request, obj):
+            obj.specification.update_fields(obj)
             # TODO groups!
             fieldsets.append(
                 (
