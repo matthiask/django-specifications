@@ -34,6 +34,6 @@ Change log
 - Initial public version.
 
 .. _0.1: https://github.com/matthiask/django-specifications/commit/efc41b6f5e4
-.. _0.2: https://github.com/matthiask/django-specifications/compare/v0.1.0...v0.2.0
-.. _0.3: https://github.com/matthiask/django-specifications/compare/v0.2.0...0.3
+.. _0.2: https://github.com/matthiask/django-specifications/compare/0.1...0.2
+.. _0.3: https://github.com/matthiask/django-specifications/compare/0.2...0.3
 .. _Next version: https://github.com/matthiask/django-specifications/compare/0.3...master
