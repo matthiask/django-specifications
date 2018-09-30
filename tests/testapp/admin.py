@@ -1,5 +1,4 @@
 from django.contrib import admin
-from django.utils.translation import ugettext_lazy as _
 
 from specifications.admin import ModelAdminWithSpecification
 
@@ -12,17 +11,6 @@ class StuffAdmin(ModelAdminWithSpecification):
         fieldsets = super(StuffAdmin, self).get_fieldsets(request, obj)
         if self.can_add_specification_fields(request, obj):
             obj.specification.update_fields(obj)
-            # TODO groups!
-            fieldsets.append(
-                (
-                    _("Specification"),
-                    {
-                        "fields": [
-                            field.formfield_name()
-                            for field in obj.fields.select_related("field__group")
-                        ]
-                    },
-                )
-            )
+            fieldsets.extend(self.grouped_specification_fieldsets(obj))
 
         return fieldsets

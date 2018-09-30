@@ -1,3 +1,5 @@
+import re
+
 from django.contrib.auth.models import User
 from django.test import Client, TestCase
 
@@ -120,10 +122,13 @@ class SpecificationsTest(TestCase):
 
         client = self.login()
 
+        response = client.get("/admin/testapp/stuff/add/")
+        self.assertEqual(response.status_code, 200)
+        self.assertNotContains(response, "8 GB")
+
         response = client.get(reverse("admin:testapp_stuff_change", args=(stuff.pk,)))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "8 GB")
 
-        response = client.get("/admin/testapp/stuff/add/")
-        self.assertEqual(response.status_code, 200)
-        self.assertNotContains(response, "8 GB")
+        h2 = re.findall(r"<h2>(.+?)</h2>", response.content.decode("utf-8"))
+        self.assertEqual(h2, ["Specification", "monitor", "computer"])

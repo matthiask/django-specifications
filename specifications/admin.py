@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 
 import inspect
+import itertools
 
 from django import forms
 from django.contrib import admin
@@ -86,3 +87,19 @@ class ModelAdminWithSpecification(admin.ModelAdmin):
         finally:
             del frame
         return False
+
+    def grouped_specification_fieldsets(self, obj):
+        fieldsets = []
+        for group, fields in itertools.groupby(
+            obj.fields.order_by("field__group__ordering", "ordering").select_related(
+                "field__group"
+            ),
+            key=lambda field: field.field.group,
+        ):
+            fieldsets.append(
+                (
+                    _("Specification") if group is None else group.name,
+                    {"fields": [field.formfield_name() for field in fields]},
+                )
+            )
+        return fieldsets
