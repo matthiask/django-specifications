@@ -56,6 +56,14 @@ class SpecificationsTest(TestCase):
             specification=spec,
         )
 
+        SpecificationField.objects.create(
+            name="Name",
+            type=SpecificationField.TEXT,
+            ordering=1,
+            group=None,  # Free-floating.
+            specification=spec,
+        )
+
         return spec
 
     def test_models(self):
@@ -68,7 +76,33 @@ class SpecificationsTest(TestCase):
 
         self.assertNotEqual(dict(specification_values_dict(stuff)), {})
 
-    def test_admin(self):
+    def test_specification_admin(self):
+        self.create_specification()
+        spec = self.create_specification()  # Create it twice.
+        client = self.login()
+
+        response = client.get(
+            reverse("admin:specifications_specification_change", args=(spec.pk,))
+        )
+        # print(response.content.decode("utf-8"))
+
+        # Test that the fields group dropdown only contains groups from the
+        # specification we are editing.
+        self.assertContains(
+            response,
+            """
+<select name="fields-__prefix__-group" id="id_fields-__prefix__-group">
+<option value="" selected>---------</option>
+<option value="{}">monitor</option>
+<option value="{}">computer</option>
+</select>
+            """.format(
+                *[group.id for group in spec.groups.all()]
+            ),
+            html=True,
+        )
+
+    def test_admin_with_specification(self):
         spec = self.create_specification()
         stuff = Stuff.objects.create(specification=spec)
 
