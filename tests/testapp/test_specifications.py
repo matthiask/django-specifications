@@ -84,7 +84,6 @@ class SpecificationsTest(TestCase):
         response = client.get(
             reverse("admin:specifications_specification_change", args=(spec.pk,))
         )
-        # print(response.content.decode("utf-8"))
 
         # Test that the fields group dropdown only contains groups from the
         # specification we are editing.
@@ -99,6 +98,19 @@ class SpecificationsTest(TestCase):
             """.format(
                 *[group.id for group in spec.groups.all()]
             ),
+            html=True,
+        )
+
+        # No groups selectable even though groups exist in other specifications.
+        response = client.get(reverse("admin:specifications_specification_add"))
+        # print(response.content.decode("utf-8"))
+        self.assertContains(
+            response,
+            """
+<select name="fields-__prefix__-group" id="id_fields-__prefix__-group">
+<option value="" selected>---------</option>
+</select>
+            """,
             html=True,
         )
 

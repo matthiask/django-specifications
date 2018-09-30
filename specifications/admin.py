@@ -29,6 +29,10 @@ class SpecificationFieldForm(forms.ModelForm):
         except KeyError:
             instance = None
 
+        # When adding new specifications ``instance`` is set but does not have
+        # a ``pk`` attribute yet. Still, instance.groups.all() works and
+        # returns an empty queryset (which is what we want -- no groups from
+        # other specifications)
         if instance:
             self.fields["group"].queryset = instance.groups.all()
 
