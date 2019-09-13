@@ -2,11 +2,7 @@ import re
 
 from django.contrib.auth.models import User
 from django.test import Client, TestCase
-
-try:
-    from django.urls import reverse
-except ImportError:  # pragma: no cover
-    from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 from specifications.models import Specification, SpecificationField
 from specifications.utils import specification_values_dict

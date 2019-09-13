@@ -5,6 +5,12 @@ Change log
 `Next version`_
 ~~~~~~~~~~~~~~~
 
+- Added a helper for adding specification field group fieldsets.
+- Fixed a bug because the code wouldn't handle the case where several
+  specification fields were gone at once.
+- Dropped compatibility guarantees with old versions of Django.
+
+
 `0.3`_ (2018-09-30)
 ~~~~~~~~~~~~~~~~~~~
 
