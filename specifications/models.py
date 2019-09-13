@@ -1,16 +1,13 @@
-from __future__ import unicode_literals
+from functools import partial
 
 from django import forms
 from django.core.cache import cache
 from django.db import models
 from django.db.models.fields import BLANK_CHOICE_DASH
 from django.template.defaultfilters import slugify
-from django.utils.encoding import python_2_unicode_compatible
-from django.utils.functional import curry
 from django.utils.translation import ugettext_lazy as _
 
 
-@python_2_unicode_compatible
 class Specification(models.Model):
     name = models.CharField(_("name"), max_length=100)
     notes = models.TextField(_("notes"), blank=True)
@@ -48,7 +45,6 @@ class Specification(models.Model):
                 valuefield.delete()
 
 
-@python_2_unicode_compatible
 class SpecificationFieldGroup(models.Model):
     specification = models.ForeignKey(
         Specification,
@@ -74,7 +70,6 @@ def open_set_formfield(**kwargs):
     return forms.CharField(**kwargs)
 
 
-@python_2_unicode_compatible
 class SpecificationFieldBase(models.Model):
     TEXT = "text"
     LONGTEXT = "longtext"
@@ -90,23 +85,23 @@ class SpecificationFieldBase(models.Model):
 
     TYPES = (
         (TEXT, _("text"), forms.CharField),
-        (LONGTEXT, _("long text"), curry(forms.CharField, widget=forms.Textarea)),
+        (LONGTEXT, _("long text"), partial(forms.CharField, widget=forms.Textarea)),
         (BOOLEAN, _("boolean"), forms.BooleanField),
         (INTEGER, _("integer"), forms.IntegerField),
         (
             CLOSED_SET_SINGLE,
             _("closed set"),
-            curry(forms.ChoiceField, widget=forms.RadioSelect),
+            partial(forms.ChoiceField, widget=forms.RadioSelect),
         ),
         (
             CLOSED_SET_MULTIPLE,
             _("closed set (multiple)"),
-            curry(forms.MultipleChoiceField, widget=forms.CheckboxSelectMultiple),
+            partial(forms.MultipleChoiceField, widget=forms.CheckboxSelectMultiple),
         ),
         (OPEN_SET_SINGLE, _("open set"), open_set_formfield),
         (OPEN_SET_SINGLE_EXTENSIBLE, ("open set (extensible)"), open_set_formfield),
         # (OPEN_SET_MULTIPLE, _('Open set (multiple)'),
-        #     curry(forms.MultipleChoiceField,
+        #     partial(forms.MultipleChoiceField,
         #           widget=forms.CheckboxSelectMultiple)),
     )
 
@@ -146,7 +141,6 @@ class SpecificationFieldBase(models.Model):
         instance.ordering = self.ordering
 
 
-@python_2_unicode_compatible
 class SpecificationField(SpecificationFieldBase):
     specification = models.ForeignKey(
         Specification,
@@ -178,7 +172,6 @@ class SpecificationField(SpecificationFieldBase):
         return self.name
 
 
-@python_2_unicode_compatible
 class SpecificationValueFieldBase(SpecificationFieldBase):
     field = models.ForeignKey(
         SpecificationField,

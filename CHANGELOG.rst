@@ -5,6 +5,9 @@ Change log
 `Next version`_
 ~~~~~~~~~~~~~~~
 
+- Dropped compatibility with Python 2.
+
+
 `0.4`_ (2019-09-13)
 ~~~~~~~~~~~~~~~~~~~
 
