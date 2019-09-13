@@ -5,8 +5,6 @@ django-specifications
 .. image:: https://travis-ci.org/matthiask/django-specifications.png?branch=master
    :target: https://travis-ci.org/matthiask/django-specifications
 
-Version |release|
-
 This module offers an easy way to attach auxiliary information to Django
 models. It allows configuring custom forms through the administration
 interface.
