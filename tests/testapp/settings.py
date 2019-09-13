@@ -14,8 +14,8 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.staticfiles",
     "django.contrib.messages",
-    "testapp",
     "specifications",
+    "testapp",
 ]
 
 MEDIA_ROOT = "/media/"

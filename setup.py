@@ -19,21 +19,7 @@ setup(
     license='BSD License',
     platforms=['OS Independent'],
     packages=find_packages(),
-    package_data={
-        '': ['*.html', '*.txt'],
-        'specifications': [
-            'locale/*/*/*.*',
-            # 'static/specifications/*.*',
-            # 'static/specifications/*/*.*',
-            'templates/*.*',
-            'templates/*/*.*',
-            'templates/*/*/*.*',
-            'templates/*/*/*/*.*',
-        ],
-    },
-    install_requires=[
-        'Django>=1.4.2',
-    ],
+    include_package_data=True,
     classifiers=[
         # 'Development Status :: 5 - Production/Stable',
         'Environment :: Web Environment',
