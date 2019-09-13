@@ -132,3 +132,27 @@ class SpecificationsTest(TestCase):
 
         h2 = re.findall(r"<h2>(.+?)</h2>", response.content.decode("utf-8"))
         self.assertEqual(h2, ["Specification", "monitor", "computer"])
+
+        field_ids = set(field.field_id for field in stuff.fields.all())
+        self.assertEqual(stuff.fields.count(), 5)
+
+        # Delete several fields at once to test the Specification.update_fields code
+        sf1 = SpecificationField.objects.get(name="RAM")
+        sf2 = SpecificationField.objects.get(name="CPU family")
+        sf3 = SpecificationField.objects.get(name="true color")
+
+        new_field_ids = field_ids - {sf1.id, sf2.id, sf3.id}
+
+        sf1.delete()
+        sf2.delete()
+        sf3.delete()
+
+        self.assertEqual(
+            set(field.field_id for field in stuff.fields.all()), new_field_ids | {None}
+        )
+
+        response = client.get(reverse("admin:testapp_stuff_change", args=(stuff.pk,)))
+        self.assertEqual(stuff.fields.count(), 2)
+        # print(response, response.content.decode("utf-8"))
+        self.assertEqual(response.status_code, 200)
+        self.assertNotContains(response, "8 GB")

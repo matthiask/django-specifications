@@ -28,20 +28,24 @@ class Specification(models.Model):
         Updates the fields on the passed instance from the specification
         """
 
-        existing = dict((f.field_id, f) for f in instance.fields.all())
+        valuefields = instance.fields.all()
+        existing = {f.field_id: f for f in valuefields if f.field_id}
         instance_field_model = instance.fields.model
 
         for spec in self.fields.all():
             try:
-                field = existing.pop(spec.pk)
+                valuefield = existing.pop(spec.pk)
             except KeyError:
-                field = instance_field_model(parent=instance, field=spec)
+                valuefield = instance_field_model(parent=instance, field=spec)
 
-            spec.update_fields_on(field)
-            field.save()
+            spec.update_fields_on(valuefield)
+            valuefield.save()
 
-        for field in existing.values():
-            field.delete()
+        for valuefield in existing.values():
+            valuefield.delete()
+        for valuefield in valuefields:
+            if not valuefield.field_id:
+                valuefield.delete()
 
 
 @python_2_unicode_compatible
