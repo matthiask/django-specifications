@@ -5,6 +5,9 @@ Change log
 `Next version`_
 ~~~~~~~~~~~~~~~
 
+`0.4`_ (2019-09-13)
+~~~~~~~~~~~~~~~~~~~
+
 - Added a helper for adding specification field group fieldsets.
 - Fixed a bug because the code wouldn't handle the case where several
   specification fields were gone at once.
@@ -42,4 +45,5 @@ Change log
 .. _0.1: https://github.com/matthiask/django-specifications/commit/efc41b6f5e4
 .. _0.2: https://github.com/matthiask/django-specifications/compare/0.1...0.2
 .. _0.3: https://github.com/matthiask/django-specifications/compare/0.2...0.3
-.. _Next version: https://github.com/matthiask/django-specifications/compare/0.3...master
+.. _0.4: https://github.com/matthiask/django-specifications/compare/0.3...0.4
+.. _Next version: https://github.com/matthiask/django-specifications/compare/0.4...master
