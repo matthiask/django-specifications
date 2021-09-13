@@ -44,13 +44,7 @@ Usage
        from specifications.admin import ModelAdminWithSpecification
 
        class MyObjectAdmin(ModelAdminWithSpecification):
-           def get_fieldsets(self, request, obj=None):
-               # Define your fieldsets
-               fieldsets = [...]
-               if self.can_add_specification_fields(request, obj):
-                   # Extend your fieldset with specification fields
-                   fieldsets.extend(...)
-               return fieldsets
+           pass
 
 The fields are available after saving a specification. The specification can
 be changed, but you risk losing data if you do this.
