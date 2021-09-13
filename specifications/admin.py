@@ -3,7 +3,6 @@ import itertools
 
 from django import forms
 from django.contrib import admin
-from django.forms.models import modelform_factory
 from django.utils.translation import gettext as _
 
 from specifications import models
