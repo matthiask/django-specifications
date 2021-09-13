@@ -126,7 +126,10 @@ class SpecificationsTest(TestCase):
         self.assertContains(response, "8 GB")
 
         h2 = re.findall(r"<h2>(.+?)</h2>", response.content.decode("utf-8"))
-        self.assertEqual(h2, ["Specification", "monitor", "computer"])
+        self.assertEqual(
+            h2,
+            ["Stuff object (1)", "Specification", "monitor", "computer"],
+        )
 
         field_ids = set(field.field_id for field in stuff.fields.all())
         self.assertEqual(stuff.fields.count(), 5)
