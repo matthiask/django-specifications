@@ -3,11 +3,10 @@ import re
 from django.contrib.auth.models import User
 from django.test import Client, TestCase
 from django.urls import reverse
+from testapp.models import Stuff
 
 from specifications.models import Specification, SpecificationField
 from specifications.utils import specification_values_dict
-
-from testapp.models import Stuff
 
 
 class SpecificationsTest(TestCase):

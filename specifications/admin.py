@@ -5,8 +5,8 @@ from django import forms
 from django.contrib import admin
 from django.utils.translation import gettext as _
 
-from specifications.forms import FormWithSpecification
 from specifications import models
+from specifications.forms import FormWithSpecification
 
 
 class SpecificationFieldGroupInline(admin.TabularInline):
