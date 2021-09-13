@@ -3,6 +3,7 @@ import itertools
 
 from django import forms
 from django.contrib import admin
+from django.forms.models import modelform_factory
 from django.utils.translation import gettext as _
 
 from specifications import models
@@ -66,25 +67,21 @@ admin.site.register(
 
 
 class ModelAdminWithSpecification(admin.ModelAdmin):
-    form = FormWithSpecification
+    def get_form(self, request, obj=None, **kwargs):
+        if not hasattr(request, "_form_with_specification_class"):
+            form_class = super().get_form(request, obj, **kwargs)
+            request._form_with_specification_class = type(
+                self.form.__name__,
+                (FormWithSpecification, form_class),
+                {},
+            )
+        return request._form_with_specification_class
 
-    def can_add_specification_fields(self, request, obj):
-        if obj is None:
-            return False
-        # Is the ModelForm already defined? Then we are currently creating
-        # the adminform helper. In this case, return a fieldset including
-        # the specifications' fields. (If we did this for creating the initial
-        # ModelForm the creation would fail because of unknown model fields.)
-        frame = inspect.currentframe()
-        try:
-            while frame:
-                ModelForm = frame.f_locals.get("ModelForm")
-                if ModelForm is not None and obj.specification:
-                    return True
-                frame = frame.f_back
-        finally:
-            del frame
-        return False
+    def get_fieldsets(self, request, obj=None):
+        fieldsets = super().get_fieldsets(request, obj)
+        if obj:
+            fieldsets.extend(self.grouped_specification_fieldsets(obj))
+        return fieldsets
 
     def grouped_specification_fieldsets(self, obj):
         fieldsets = []
