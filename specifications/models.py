@@ -191,13 +191,13 @@ class SpecificationValueFieldBase(SpecificationFieldBase):
         return self.fullname
 
     def save(self, *args, **kwargs):
-        super(SpecificationValueFieldBase, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
         self.clobber_choices_cache()
 
     save.alters_data = True
 
     def delete(self, *args, **kwargs):
-        super(SpecificationValueFieldBase, self).delete(*args, **kwargs)
+        super().delete(*args, **kwargs)
         self.clobber_choices_cache()
 
     save.alters_data = True

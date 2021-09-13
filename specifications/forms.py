@@ -5,7 +5,7 @@ from django import forms
 
 class FormWithSpecification(forms.ModelForm):
     def __init__(self, *args, **kwargs):
-        super(FormWithSpecification, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         self.specification_fields = OrderedDict()
         if self.instance and self.instance.pk and self.instance.specification:
@@ -16,7 +16,7 @@ class FormWithSpecification(forms.ModelForm):
                 )
 
     def save(self, *args, **kwargs):
-        instance = super(FormWithSpecification, self).save(*args, **kwargs)
+        instance = super().save(*args, **kwargs)
 
         if self.specification_fields:
             for field in instance.fields.all():

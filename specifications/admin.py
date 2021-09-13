@@ -20,7 +20,7 @@ class SpecificationFieldForm(forms.ModelForm):
         fields = "__all__"
 
     def __init__(self, *args, **kwargs):
-        super(SpecificationFieldForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         try:
             # DON'T LOOK! WAAAH
@@ -36,7 +36,7 @@ class SpecificationFieldForm(forms.ModelForm):
             self.fields["group"].queryset = instance.groups.all()
 
     def clean(self):
-        data = super(SpecificationFieldForm, self).clean()
+        data = super().clean()
 
         if data.get("choices") and "_set_" not in data.get("type"):
             raise forms.ValidationError(
