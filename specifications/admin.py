@@ -79,6 +79,7 @@ class ModelAdminWithSpecification(admin.ModelAdmin):
     def get_fieldsets(self, request, obj=None):
         fieldsets = super().get_fieldsets(request, obj)
         if obj:
+            obj.specification.update_fields(obj)  # XXX Maybe once too often
             fieldsets.extend(self.grouped_specification_fieldsets(obj))
         return fieldsets
 
