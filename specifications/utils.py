@@ -26,9 +26,9 @@ def specification_values_comparison(*instances):
     for field in ValueField._default_manager.filter(
         parent__in=instances
     ).select_related("field__group"):
-        groups[field.field.group][field.field][
-            indices[field.parent_id]
-        ] = field.get_value_display()
+        groups[field.field.group][field.field][indices[field.parent_id]] = (
+            field.get_value_display()
+        )
 
     group_list = []
     for group, fields in sorted(groups.items()):

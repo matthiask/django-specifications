@@ -92,9 +92,7 @@ class SpecificationsTest(TestCase):
 <option value="{}">monitor</option>
 <option value="{}">computer</option>
 </select>
-            """.format(
-                *[group.id for group in spec.groups.all()]
-            ),
+            """.format(*[group.id for group in spec.groups.all()]),
             html=True,
         )
 

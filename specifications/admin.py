@@ -23,7 +23,7 @@ class SpecificationFieldForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
 
         try:
-            # DON'T LOOK! WAAAH
+            # DON'T LOOK!
             instance = inspect.currentframe().f_back.f_locals["self"].instance
         except KeyError:
             instance = None
@@ -32,7 +32,11 @@ class SpecificationFieldForm(forms.ModelForm):
         # a ``pk`` attribute yet. Still, instance.groups.all() works and
         # returns an empty queryset (which is what we want -- no groups from
         # other specifications)
-        if instance:
+        if instance._state.adding:
+            self.fields[
+                "group"
+            ].queryset = instance.groups.model._default_manager.none()
+        elif instance:
             self.fields["group"].queryset = instance.groups.all()
 
     def clean(self):
